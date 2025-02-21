@@ -1,4 +1,4 @@
-# MicelleSegger
+# LocScale-SURFER (**S**egmentation of **U**nresolved **R**egions and **F**iltering for **E**nhanced **R**epresentation)
 
 
 
