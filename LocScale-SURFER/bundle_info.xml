@@ -1,0 +1,56 @@
+<!--
+ChimeraX bundle names must start with "ChimeraX-"
+to avoid clashes with package names in pypi.python.org.
+When uploaded to the ChimeraX toolshed, the bundle
+will be displayed without the ChimeraX- prefix.
+-->
+
+<BundleInfo name="ChimeraX-locscalesurfer"
+	    version="0.1" package="chimerax.locscalesurfer"
+  	    minSessionVersion="1" maxSessionVersion="1">
+
+  <!-- Additional information about bundle source -->
+  <Author>Alok Bharadwaj, Arjen Jakobi</Author>
+  <Email>a.bharadwaj@tudelft.nl, a.jakobi@tudelft.nl</Email>
+  <URL>https://gitlab.tudelft.nl/aj-lab/locscale</URL>
+
+  <!-- Synopsis is a one-line description
+       Description is a full multi-line description -->
+  <Synopsis>To segment cryoEM maps to display detergent micelles</Synopsis>
+  <Description>Segmentation
+  </Description>
+
+  <!-- Categories is a list where this bundle should appear -->
+  <Categories>
+    <Category name="General"/>
+  </Categories>
+
+  <ExtraFiles>
+    <ExtraDir source='U:\ajlab\AB\PhD_research\segmenting_detergent_micelle\LocScale-SURFER\src\dataDir'/>
+  </ExtraFiles>
+
+  <!-- Dependencies on other ChimeraX/Python packages -->
+  <Dependencies>
+    <Dependency name="ChimeraX-Core" version="~=1.1"/>
+    <Dependency name="ChimeraX-UI" version="~=1.0"/>
+    <Dependency name="torch" version="~=2.2.2"/>
+    <Dependency name="einops" version="~=0.3.2"/>
+    <Dependency name="mrcfile" version="~=1.3.0"/>
+    <Dependency name="numpy" version="~=1.24.4"/>
+    <Dependency name="scipy" version="~=1.10.1"/>
+    <Dependency name="timm" version="~=0.4.2"/>
+    <Dependency name="tqdm" version="~=4.66.2"/>
+  </Dependencies>
+
+  <Classifiers>
+    <!-- Development Status should be compatible with bundle version number -->
+    <PythonClassifier>Development Status :: 3 - Alpha</PythonClassifier>
+    <PythonClassifier>License :: Freeware</PythonClassifier>
+    <!-- ChimeraX classifiers describe supplied functionality -->
+    <!-- Register two commands for printing the center of mass
+	 and selecting/coloring atom(s) nearest the center of mass of atoms -->
+    <ChimeraXClassifier>ChimeraX :: Command :: locscalesurfer :: General ::
+      segments a membrane protein</ChimeraXClassifier>
+  </Classifiers>
+
+</BundleInfo>
