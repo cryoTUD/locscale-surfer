@@ -131,17 +131,15 @@ def predict(
 
     # Make prediction
     prediction = []
-    uncertainty = [] # for variance prediction (monte carlo dropout)
 
     num_batches = len(eval_dataloader)
     with torch.no_grad():
-        for emmap in eval_dataloader:
+        for i, emmap in enumerate(eval_dataloader):
+            print(f"Processing batch {i+1}/{num_batches}...")
             emmap = emmap.to(device)
             outputs = model(emmap)
             outputs = torch.sigmoid(outputs)
             
-            sys.stdout.flush()
-
             if torch.cuda.is_available():
                 outputs = outputs.cpu()
 
@@ -154,12 +152,8 @@ def predict(
     # Reassemble prediction
     prediction = reassemble_map(prediction, filtered_cube_centers, cube_size, prepro_unsharp_shape)
 
-
     # Resample reassembly
     prediction = resample_map(prediction, emmap_size_new=unsharp_map_shape, order=2)
-
-
-    sys.stdout.flush()
 
     return prediction
 

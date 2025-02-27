@@ -26,7 +26,7 @@ will be displayed without the ChimeraX- prefix.
   </Categories>
 
   <ExtraFiles>
-    <ExtraDir source='U:\ajlab\AB\PhD_research\segmenting_detergent_micelle\LocScale-SURFER\src\dataDir'/>
+    <ExtraDir source='U:\ajlab\AB\PhD_research\segmenting_detergent_micelle\surfer\LocScale-SURFER\src\dataDir'/>
   </ExtraFiles>
 
   <!-- Dependencies on other ChimeraX/Python packages -->
@@ -49,7 +49,7 @@ will be displayed without the ChimeraX- prefix.
     <!-- ChimeraX classifiers describe supplied functionality -->
     <!-- Register two commands for printing the center of mass
 	 and selecting/coloring atom(s) nearest the center of mass of atoms -->
-    <ChimeraXClassifier>ChimeraX :: Command :: locscalesurfer :: General ::
+    <ChimeraXClassifier>ChimeraX :: Tool :: locscalesurfer :: General ::
       segments a membrane protein</ChimeraXClassifier>
   </Classifiers>
 
