@@ -25,9 +25,9 @@ will be displayed without the ChimeraX- prefix.
     <Category name="General"/>
   </Categories>
 
-  <ExtraFiles>
-    <ExtraDir source='U:\ajlab\AB\PhD_research\segmenting_detergent_micelle\surfer\LocScale-SURFER\src\dataDir'/>
-  </ExtraFiles>
+  <DataFiles>
+    <DataDir>models</DataDir>
+  </DataFiles>
 
   <!-- Dependencies on other ChimeraX/Python packages -->
   <Dependencies>
