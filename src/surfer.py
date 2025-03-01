@@ -103,18 +103,13 @@ def predict(
         print(f'Using GPU: {gpu_ids}')
         model = torch.nn.DataParallel(model, device_ids=["cuda:" + str(gpu_id) for gpu_id in gpu_ids])
     elif device == 'cpu':
-        print('Using CPU. This may take a while...')  
+        print('Using CPU.')  
         model = torch.nn.DataParallel(model, map_location=device)
     
     use_gpu = torch.cuda.is_available()
-    print(f"Using device: {device}")
   
-    print(f"Loading model state from {model_state_path}...")
     checkpoint = torch.load(model_state_path, map_location=device)
-    print(f"Loaded checkpoint ")
     state_dict = checkpoint['model_state_dict']
-    print(f"Loaded model state dict ")
-    print(f"Keys in state_dict: {state_dict.keys()}")
     #model_state_dict = torch.load(model_state_path)
     # remove the module. prefix from the keys
     new_state_dict = OrderedDict()
@@ -135,7 +130,6 @@ def predict(
     num_batches = len(eval_dataloader)
     with torch.no_grad():
         for i, emmap in enumerate(eval_dataloader):
-            print(f"Processing batch {i+1}/{num_batches}...")
             emmap = emmap.to(device)
             outputs = model(emmap)
             outputs = torch.sigmoid(outputs)
@@ -154,6 +148,7 @@ def predict(
 
     # Resample reassembly
     prediction = resample_map(prediction, emmap_size_new=unsharp_map_shape, order=2)
+    print(f"Prediction done. Shape: {prediction.shape}")
 
     return prediction
 
