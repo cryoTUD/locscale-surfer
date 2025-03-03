@@ -16,17 +16,20 @@ will be displayed without the ChimeraX- prefix.
 
   <!-- Synopsis is a one-line description
        Description is a full multi-line description -->
-  <Synopsis>To segment cryoEM maps to display detergent micelles</Synopsis>
-  <Description>Segmentation
+  <Synopsis>Segmentation of Unresolved Regions and Filtering for Enhanced Representation</Synopsis>
+  <Description>
+  A deep learning based tool for segmentation of unresolved regions (primarily micelle belt) in cryo-EM maps of membrane proteins. 
   </Description>
 
   <!-- Categories is a list where this bundle should appear -->
   <Categories>
-    <Category name="General"/>
+    <Category name="EM"/>
+    <Category name="Volume Data"/>
   </Categories>
 
   <DataFiles>
     <DataDir>data</DataDir>
+    <DataDir>images</DataDir>
   </DataFiles>
 
   <!-- Dependencies on other ChimeraX/Python packages -->
@@ -47,10 +50,7 @@ will be displayed without the ChimeraX- prefix.
     <PythonClassifier>Development Status :: 3 - Alpha</PythonClassifier>
     <PythonClassifier>License :: Freeware</PythonClassifier>
     <!-- ChimeraX classifiers describe supplied functionality -->
-    <!-- Register two commands for printing the center of mass
-	 and selecting/coloring atom(s) nearest the center of mass of atoms -->
-    <ChimeraXClassifier>ChimeraX :: Tool :: locscalesurfer :: General ::
-      segments a membrane protein</ChimeraXClassifier>
+    <ChimeraXClassifier>ChimeraX :: Tool :: LocScale-SURFER :: Volume Data :: Segmentation of Unresolved Regions and Filtering for Enhanced Representation</ChimeraXClassifier>
   </Classifiers>
 
 </BundleInfo>
