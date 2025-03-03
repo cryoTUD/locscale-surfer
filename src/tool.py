@@ -1,6 +1,7 @@
 # This script was developed using the EMAlign plugin as a template
 import os
 from chimerax.core import tools
+from chimerax.core.commands import run
 from chimerax.core.tools import ToolInstance
 from chimerax.ui import MainToolWindow
 from chimerax.ui.widgets import vertical_layout, button_row, ModelMenuButton, CollapsiblePanel, radio_buttons, EntriesRow
@@ -80,7 +81,7 @@ class SegmentMapTool(ToolInstance):
         hlayout1.addWidget(self._query_map_menu)
 
         # Mask map selection (optional). Set autoselect="none" so that no default model is chosen.
-        mask_label = QLabel("Mask map (optional):", hframe1)
+        mask_label = QLabel("Mask (optional):", hframe1)
         mask_map_help_text = help_info["mask_map_help"]
         mask_label.setToolTip(mask_map_help_text)
         hlayout1.addWidget(mask_label)
@@ -358,8 +359,17 @@ class SegmentMapTool(ToolInstance):
         # Create new volume for target map without detergent.
         target_grid_data = ArrayGridData(new_target_map, origin=origin, step=pixel_size)
         target_grid_data.name = target_map.name + "_without_detergent"
-        volume_from_grid_data(target_grid_data, self.session)
-        self._status_label.setText("Detergent removal complete.")
+        new_target_map_volume = volume_from_grid_data(target_grid_data, self.session)
+        self._status_label.setText("Micelle removal complete.")
+
+        # Display new target map and old target map at the same contour level for comparison.
+        target_map.set_transparency(25)
+        surface_level_of_target_map = target_map.minimum_surface_level
+        run(self.session, "vop hide")
+        new_target_map_volume.set_parameters(surface_levels=[surface_level_of_target_map], image_colors=[(0,1,0)])
+        new_target_map_volume.show()
+        target_map.show()
+
 
     def _input_map(self):
         m = self._query_map_menu.value

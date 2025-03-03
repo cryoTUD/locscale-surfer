@@ -1,6 +1,6 @@
 {
     "input_map_help" : "Please input unsharpened, filtered maps for best results.",
-    "mask_map_help" : "Use a mask to speed up segmentation by excluding regions of no interest.",
+    "mask_map_help" : "Use mask to speed up computation",
     "target_map_help" : "Select the map from which detergent micelles should be removed.",
     "threshold_help" : "Use volume viewer to select the right threshold to binarize the segmented map.",
     "batch_size_help" : "Number of cubes in each batch. Larger batch sizes may require more GPU memory.",
