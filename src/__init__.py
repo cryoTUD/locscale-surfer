@@ -27,19 +27,8 @@ class _segmentMap(BundleAPI):
         # (without the leading and trailing whitespace),
         # and import the function to call and its argument
         # description from the ``tool`` module.
-        if ti.name == 'locscalesurfer':
-            from . import tool 
-            return tool.SegmentMapTool(session, ti.name)
-        else:
-            raise ValueError("@#@# Unknown command: " + ti.command)
-        
-    @staticmethod
-    def get_class(class_name):
-        if class_name == "SegmentMapTool":
-            from . import tool
-            return tool.SegmentMapTool
-        else:
-            raise ValueError("Unknown class #@: " + class_name)
+        from . import tool 
+        return tool.SegmentMapTool(session, ti.name)
 
 
 # Create the ``bundle_api`` object that ChimeraX expects.
