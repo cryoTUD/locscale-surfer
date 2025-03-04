@@ -1,3 +1,11 @@
+"""
+Delft University of Technology (TU Delft) hereby disclaims
+all copyright interest in the program “LocScale-SURFER” written by
+the Author(s).
+
+Copyright (C) 2025 Arjen J. Jakobi (TU Delft), Alok Bhradwaj (TU Delft) and Lotte Verbeek (TU Delft)
+
+"""
 from chimerax.core.commands import CmdDesc      # Command description
 import chimerax
 
