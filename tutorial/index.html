@@ -474,13 +474,13 @@ Start up <a href="">ChimeraX</a> and load unsharpened map, LocScale-FEM (feature
 <p><span class="twemoji lg top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 10.5a1.5 1.5 0 0 1-1.5 1.5c.84 0 1.5.67 1.5 1.5V15c0 1.11-.89 2-2 2H9v-2h4v-2h-2v-2h2V9H9V7h4c1.11 0 2 .89 2 2m4-6H5c-1.09 0-2 .9-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> <strong>Start micelle/membrane prediction</strong>  </p>
 <hr />
 <p><img alt="SURFER_tutorial_03" src="../img/LocScale-SURFER_tutorial_03.png" />
-In the LocScale-SURFER GUI select the raw, unsharpened map and the FDR confidence mask from the <code>LocScale</code> run. This will take 1-5 min, depending on the size of your map.</p>
+In the LocScale-SURFER GUI select the raw, unsharpened map and the FDR confidence mask from the <code>LocScale</code> run. If you do not have an FDR mask you can generate one on the fly (in this case leave the mask field empty). Then press "Segment". This will take 1-5 min, depending on the size of your map.</p>
 </li>
 <li>
 <p><span class="twemoji lg top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 17h-2v-4H9V7h2v4h2V7h2m4-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> <strong>Segment and subtract micelle/membrane</strong>  </p>
 <hr />
 <p><img alt="SURFER_tutorial_04" src="../img/LocScale-SURFER_tutorial_04.png" />
-Select the map from which the segmented micelle should be subtracted (in this case the feature-enhanced map from <code>LocScale-FEM</code>. This will create a new volume.</p>
+Select the map from which the segmented micelle should be subtracted (in this case the feature-enhanced map from <code>LocScale-FEM</code>) and choose a removal threshold (this is the threshold of the removal mask - called "predicted_micelle"). Typically the 0.5 default is fine, but you may have to tune it. The mask should cover your detergent belt/micelle/nanodisk without cutting into remaining density. "Remove" will then create a new volume with the micelle substracted.</p>
 </li>
 <li>
 <p><span class="twemoji lg top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 9h-4v2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H9v-2h4v-2H9V7h6m4-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> <strong>Toggle between maps with and without micelle</strong></p>
