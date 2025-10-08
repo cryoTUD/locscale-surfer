@@ -8,7 +8,8 @@ import torch
 from torch.utils.data import DataLoader
 from einops import rearrange
 from tqdm import tqdm
-
+from scipy.ndimage import uniform_filter   
+from scipy.ndimage import label
 from src.surfer import predict
 from src.locscale_emmernet_utils import (
     load_map,
@@ -71,6 +72,7 @@ def cube_map(
 
 def predict(
     input_map_path: str,
+    target_map_path: str = None,
     prediction_path: str = None,
     batch_size: int = 8,
     cube_size: int = 48,
@@ -78,7 +80,7 @@ def predict(
     model_state_path: str = None,
     standardize: bool = True,
     mask_path: str = None, # new parameter
-
+    threshold: float = 0.5
 ):
 
     # Set random seeds for reproducibility
@@ -90,7 +92,8 @@ def predict(
         input_map_path, cube_size, standardize=standardize, mask_path=mask_path)
 
     eval_dataloader = DataLoader(cubed_unsharp_map, batch_size=batch_size, shuffle=False)
-
+    if target_map_path is not None:
+        target_map, apix = load_map(target_map_path)
     # Set the correct model
     
     model = SCUNet(
@@ -171,8 +174,18 @@ def predict(
         basename = os.path.basename(input_map_path)
         output_filename = os.path.join(os.path.dirname(input_map_path), f'{basename}_micelle_prediction.mrc')
     
-
+    if target_map_path is not None:
+        binarized_prediction = (prediction >= threshold).astype(np.float32)
+        # smooth the binarized prediction
+        smoothed_prediction = uniform_filter(binarized_prediction, size=3)
+        # remove micelle
+        target_map_without_micelle = target_map * (1 - smoothed_prediction)
+        # save the target map without micelle
+        basename_target = os.path.basename(target_map_path)
+        output_target_filename = os.path.join(os.path.dirname(target_map_path), f'{basename_target}_without_micelle.mrc')
+        save_as_mrc(target_map_without_micelle, output_target_filename, apix=apix)
         
+
     save_as_mrc(prediction, output_filename, apix=unsharp_apix)
     print(f'Prediction saved under: {output_filename}')
     
@@ -183,11 +196,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Predict enhanced map using SCUNet/EmmerNet models.')
 
     parser.add_argument('-i', '--input', required=True, help='Path to the input unsharpened map (.mrc file).')
+    parser.add_argument('-t', '--target', required=False, help='Path to the target map (.mrc file) for micelle subtraction')
     parser.add_argument('-o', '--output', required=False, help='Path to the output prediction (.mrc file).')
-    parser.add_argument('-mp', '--model_path', default=None,
-                        help='Path to the model state file (.pt). If not provided, uses default path.')
     parser.add_argument('-mask', '--mask_path', default=None, 
                         help='Path to the mask file (.mrc).')
+    parser.add_argument('-th', '--threshold', type=float, default=0.5, help='Threshold for binarizing the prediction (default: 0.5).')
     parser.add_argument('-b', '--batch_size', type=int, default=64, help='Batch size for prediction (default: 8).')
     parser.add_argument('-cz', '--cube_size', type=int, default=48, help='Cube size (default: 48).')
     parser.add_argument('-g', '--gpu_ids', type=int, nargs='+', default=[0],
@@ -196,19 +209,23 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     input_path = args.input
+    target_path = args.target
     prediction_path = args.output
     model_arch = "scunet"
     model_state_path = SCUNET_MODEL_PATH
     batch_size = args.batch_size
     cube_size = args.cube_size
     gpu_ids = args.gpu_ids
+    threshold = args.threshold
 
     predict(
         input_map_path=input_path,
+        target_map_path=target_path,
         prediction_path=prediction_path,
         batch_size=batch_size,
         cube_size=cube_size,
         gpu_ids=gpu_ids,
         model_state_path=model_state_path,
         mask_path=args.mask_path,
+        threshold=threshold
     )
