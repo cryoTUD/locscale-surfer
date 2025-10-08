@@ -117,7 +117,7 @@ def predict(
         model = torch.nn.DataParallel(model, device_ids=["cuda:" + str(gpu_id) for gpu_id in gpu_ids])
     else:
         print('Using CPU. This may take a while...')  
-        model = torch.nn.DataParallel(model, device_ids=["cuda:" + str(gpu_id) for gpu_id in gpu_ids])
+        model = model.cpu()
     
     
 
@@ -201,9 +201,9 @@ if __name__ == "__main__":
     parser.add_argument('-mask', '--mask_path', default=None, 
                         help='Path to the mask file (.mrc).')
     parser.add_argument('-th', '--threshold', type=float, default=0.5, help='Threshold for binarizing the prediction (default: 0.5).')
-    parser.add_argument('-b', '--batch_size', type=int, default=64, help='Batch size for prediction (default: 8).')
+    parser.add_argument('-b', '--batch_size', type=int, default=32, help='Batch size for prediction (default: 32).')
     parser.add_argument('-cz', '--cube_size', type=int, default=48, help='Cube size (default: 48).')
-    parser.add_argument('-g', '--gpu_ids', type=int, nargs='+', default=[0],
+    parser.add_argument('-g', '--gpu_ids', type=int, nargs='+', default=None,
                         help='List of GPU IDs to use (default: [0]).')
 
     args = parser.parse_args()
