@@ -67,7 +67,7 @@ class SegmentMapTool(ToolInstance):
         self.log.info("LocScale-SURFER tool initialized.")
         self.log.info("Segment and hide micelle densities in cryo-EM maps.")
         self.log.info(
-            "Use an unsharpened map as input, and optionally a mask map to speed up computation"
+            "Use unsharpened halfmaps as input, and optionally a mask map to speed up computation. Recommended to use GPUs"
         )
 
         # Additional buttons for Options and Help.
