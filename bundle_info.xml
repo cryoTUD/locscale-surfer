@@ -12,13 +12,13 @@ will be displayed without the ChimeraX- prefix.
   <!-- Additional information about bundle source -->
   <Author>Alok Bharadwaj, Arjen Jakobi</Author>
   <Email>a.bharadwaj@tudelft.nl, a.jakobi@tudelft.nl</Email>
-  <URL>https://cryotud.github.io/locscale-surfer/</URL>
+  <URL>https://github.com/cryoTUD/locscale-surfer</URL>
 
   <!-- Synopsis is a one-line description
        Description is a full multi-line description -->
   <Synopsis>Segmentation of Unresolved Regions and Filtering for Enhanced Representation</Synopsis>
   <Description>
-  A deep learning based tool for segmentation of unresolved regions (primarily micelle belt) in cryo-EM maps of membrane proteins. 
+  A deep learning based tool for segmentation of unresolved regions in cryo-EM maps of membrane proteins. 
   </Description>
 
   <!-- Categories is a list where this bundle should appear -->
