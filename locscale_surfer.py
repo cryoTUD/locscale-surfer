@@ -47,6 +47,7 @@ def cube_map(
     """
     # (a) Load unsharpened map
     unsharp_map, unsharp_apix = load_map(unsharp_map_path)
+    print(f"Input map loaded with shape: {unsharp_map.shape} and apix: {unsharp_apix}")
     if mask_path is not None:
         mask, mask_apix = load_map(mask_path)
     
@@ -74,7 +75,7 @@ def predict(
     input_map_path: str,
     target_map_path: str = None,
     prediction_path: str = None,
-    batch_size: int = 8,
+    batch_size: int = 16,
     cube_size: int = 48,
     gpu_ids: list = [0],
     model_state_path: str = None,
