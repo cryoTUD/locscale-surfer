@@ -103,13 +103,14 @@ class SegmentMapTool(ToolInstance):
         header1 = QLabel("<b>Step 1: Segment Map</b>", step1_frame)
         step1_layout.addWidget(header1)
 
+        # Input map selection
         hframe1 = QFrame(step1_frame)
         hlayout1 = QHBoxLayout(hframe1)
         hlayout1.setContentsMargins(0, 0, 0, 0)
         hlayout1.setSpacing(10)
 
-        # Input map selection.
-        input_label = QLabel("Input unsharpened map:", hframe1)
+        
+        input_label = QLabel("Input halfmap 1:", hframe1)
         input_map_help_text = help_info["input_map_help"]
         input_label.setToolTip(input_map_help_text)
         hlayout1.addWidget(input_label)
@@ -122,6 +123,23 @@ class SegmentMapTool(ToolInstance):
         hlayout1.addWidget(self._query_map_menu)
         hlayout1.addStretch(1)
         step1_layout.addWidget(hframe1)
+
+        # Input second half map selection 
+        hframe2 = QFrame(step1_frame)
+        hlayout2 = QHBoxLayout(hframe2)
+        hlayout2.setContentsMargins(0, 0, 0, 0)
+        hlayout2.setSpacing(10)
+
+        input_label2 = QLabel("Input halfmap 2:", hframe2)
+        input_map_help_text = help_info["input_map_help"]
+        input_label2.setToolTip(input_map_help_text)
+        hlayout2.addWidget(input_label2)
+
+        self._query_map_menu2 = ModelMenuButton(self.session, class_filter=Volume)
+        self._query_map_menu2.value_changed.connect(self._object_chosen)
+        hlayout2.addWidget(self._query_map_menu2)
+        hlayout2.addStretch(1)
+        step1_layout.addWidget(hframe2)
 
         # Mask map selection (optional). Set autoselect="none" so that no default model is chosen.
         mask_frame = QFrame(step1_frame)
@@ -429,6 +447,7 @@ class SegmentMapTool(ToolInstance):
         import os
 
         input_map_for_segmentation = self._input_map()
+        input_map_2_for_segmentation = self._input_map_2()
         mask_map = self._mask_map()  # optional
 
         model_state_path = os.path.join(
@@ -439,7 +458,10 @@ class SegmentMapTool(ToolInstance):
         )
 
         if input_map_for_segmentation is None:
-            self.log.warning("No input map selected for segmentation.")
+            self.log.warning("Halfmap 1 is required for segmentation.")
+            return
+        if input_map_2_for_segmentation is None:
+            self.log.warning("Halfmap 2 is required for segmentation.")
             return
 
         # Allow mask_map to be None.
@@ -456,7 +478,9 @@ class SegmentMapTool(ToolInstance):
         else:
             self.log.info("No mask map provided.")
 
-        input_map_np = input_map_for_segmentation.data.full_matrix()
+        input_map_1_np = input_map_for_segmentation.data.full_matrix()
+        input_map_2_np = input_map_2_for_segmentation.data.full_matrix()
+        input_map_np = (input_map_1_np + input_map_2_np) / 2.0  # Average the two halfmaps
         pixel_size = input_map_for_segmentation.data.step
         origin = input_map_for_segmentation.data.origin
         # Print the status
@@ -557,6 +581,10 @@ class SegmentMapTool(ToolInstance):
 
     def _input_map(self):
         m = self._query_map_menu.value
+        return m if isinstance(m, Volume) else None
+
+    def _input_map_2(self):
+        m = self._query_map_menu2.value
         return m if isinstance(m, Volume) else None
 
     def _mask_map(self):
