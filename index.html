@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#locscale-surfersegmentation-of-unresolved-regions-and-filtering-for-enhanced-representation" class="md-skip">
+        <a href="#surfersegmentation-of-unstructured-regions-and-filtering-for-enhanced-representation" class="md-skip">
           Skip to content
         </a>
       
@@ -314,9 +314,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-does-locscale-surfer-do" class="md-nav__link">
+  <a href="#what-does-surfer-do" class="md-nav__link">
     <span class="md-ellipsis">
-      What does LocScale-SURFER do?
+      What does SURFER do?
     </span>
   </a>
   
@@ -432,9 +432,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-does-locscale-surfer-do" class="md-nav__link">
+  <a href="#what-does-surfer-do" class="md-nav__link">
     <span class="md-ellipsis">
-      What does LocScale-SURFER do?
+      What does SURFER do?
     </span>
   </a>
   
@@ -468,9 +468,9 @@
   
 
 
-<h1 id="locscale-surfersegmentation-of-unresolved-regions-and-filtering-for-enhanced-representation">LocScale-SURFER<br><sup><strong>S</strong>egmentation of <strong>U</strong>nresolved <strong>R</strong>egions and <strong>F</strong>iltering for <strong>E</strong>nhanced <strong>R</strong>epresentation</sup></h1>
-<p>LocScale-SURFER is a <a href="https://www.cgl.ucsf.edu/chimerax/">ChimeraX</a> bundle for enhancing visualisation and interpretation of <code>LocScale</code>-optimised maps containing contextual structure. It currently supports the detection and targeted segmentation/removal of micellar/membranous structures, but may be extended to other contextual structures in the future. </p>
-<h3 id="what-does-locscale-surfer-do">What does LocScale-SURFER do?</h3>
+<h1 id="surfersegmentation-of-unstructured-regions-and-filtering-for-enhanced-representation">SURFER<br><sup><strong>S</strong>egmentation of <strong>U</strong>nstructured <strong>R</strong>egions and <strong>F</strong>iltering for <strong>E</strong>nhanced <strong>R</strong>epresentation</sup></h1>
+<p>SURFER is a <a href="https://www.cgl.ucsf.edu/chimerax/">ChimeraX</a> bundle for segmentation of membrane, micelle and nanodisc densities in cryo-EM maps. Originally developed for enhancing visualisation and interpretation of <code>LocScale</code>-optimised maps containing contextual structure, its segmentation procedure operates on unfiltered half maps and the resulting segmentation masks can be applied to any (post-processed) map aligned to these half maps. It currently supports the detection and targeted segmentation/removal of micellar/membranous structures, but may be extended to other contextual structures in the future. </p>
+<h3 id="what-does-surfer-do">What does SURFER do?</h3>
 <p><code>LocScale 2.0</code> is a program for cryoEM map optimisation that attemps to preserve contextual structure in the optimised maps. For visualisation, it is often useful to toggle between views including and excluding this contextual structure. For example, for membrane proteins reconstituted in detergent micelles, liposomes or nanodisks it may be useful to represent the map with and without the micelle or membrane. <code>LocScale-SURFER</code> allows to infer these structures from the raw map to segment and subtract these densities from the optimised map. </p>
 <div style="display: flex; flex-direction: column; align-items: left;">
   <div class="c-compare" style="--value:50%; position: relative; width: 400px; height: 333px; overflow: hidden;">
