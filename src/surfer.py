@@ -74,6 +74,7 @@ def predict(
     step_size: int = 32,
     gpu_ids: list | None = None,
     model_state_path: str = None,
+    progress_cb = None, 
 ):
     """
     Function to predict an enhanced map.
@@ -94,7 +95,7 @@ def predict(
 
     random.seed(42)
     torch.manual_seed(42)
-
+    
     if gpu_ids is None:
         gpu_ids = [0]
 
@@ -111,6 +112,7 @@ def predict(
     eval_dataloader = DataLoader(
         cubed_unsharp_map, batch_size=batch_size, shuffle=False
     )
+    n_batches = len(eval_dataloader) 
 
     model = SCUNet(
         in_nc=1,
@@ -158,7 +160,7 @@ def predict(
     prediction = []
 
     with torch.no_grad():
-        for emmap in eval_dataloader:
+        for i, emmap in enumerate(eval_dataloader):
             emmap = emmap.to(device)
             outputs = torch.sigmoid(model(emmap))
 
@@ -166,6 +168,10 @@ def predict(
                 outputs = outputs.detach().cpu()
 
             prediction.append(outputs.numpy())
+            
+            if progress_cb is not None:
+                pct = int((i + 1) / n_batches * 100)
+                progress_cb(pct)
 
     # Concatenate the predictions
     prediction = np.concatenate(prediction, axis=0)

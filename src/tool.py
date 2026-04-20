@@ -15,6 +15,7 @@ from chimerax.ui.widgets import (
     button_row,
     vertical_layout,
 )
+from Qt.QtCore import QThread, Signal         
 from Qt.QtCore import Qt
 from Qt.QtWidgets import (
     QCheckBox,
@@ -25,6 +26,7 @@ from Qt.QtWidgets import (
     QPushButton,
     QSlider,
     QSpinBox,
+    QProgressBar
 )
 
 from .surfer import predict
@@ -33,6 +35,25 @@ help_info_path = os.path.join(os.path.dirname(__file__), "data", "help_info.json
 with open(help_info_path, "r") as f:
     help_info = json.load(f)
 
+class PredictionWorker(QThread):
+    """Runs predict() in a background thread; emits signals to update the GUI."""
+    progress = Signal(int)      # 0–100
+    status   = Signal(str)      # status messages for the log/label
+    finished = Signal(object)   # carries the raw numpy prediction array
+
+    def __init__(self, predict_kwargs: dict):
+        super().__init__()
+        self._kwargs = predict_kwargs
+
+    def run(self):
+        """Called in the background thread — never touch ChimeraX models here."""
+        from .surfer import predict
+
+        result = predict(
+            **self._kwargs,
+            progress_cb=self.progress.emit,    # directly wire signal as callback
+        )
+        self.finished.emit(result)
 
 class SegmentMapTool(ToolInstance):
     def __init__(self, session, tool_name):
@@ -173,6 +194,21 @@ class SegmentMapTool(ToolInstance):
         seg_layout.addWidget(self._segment_button)
         seg_layout.addStretch(1)
         step1_layout.addWidget(hframe_seg)
+        # "Progress bar" button in Step 1.
+        # Progress bar — lives below the Segment button in Step 1
+        hframe_prog = QFrame(step1_frame)
+        prog_layout = QHBoxLayout(hframe_prog)
+        prog_layout.setContentsMargins(0, 0, 0, 0)
+        prog_layout.setSpacing(10)
+        progress_label = QLabel("Segmentation Progress:", hframe_prog)
+        prog_layout.addWidget(progress_label)
+        self._progress_bar = QProgressBar(hframe_prog)
+        self._progress_bar.setRange(0, 100)
+        self._progress_bar.setValue(0)
+        self._progress_bar.setVisible(False)      # hidden until segmentation starts
+        prog_layout.addWidget(self._progress_bar)
+        step1_layout.addWidget(hframe_prog)
+
 
         main_layout.addWidget(step1_frame)
 
@@ -446,9 +482,9 @@ class SegmentMapTool(ToolInstance):
     def _segment(self):
         import os
 
-        input_map_for_segmentation = self._input_map()
+        input_map_for_segmentation  = self._input_map()
         input_map_2_for_segmentation = self._input_map_2()
-        mask_map = self._mask_map()  # optional
+        mask_map = self._mask_map()
 
         model_state_path = os.path.join(
             os.path.dirname(__file__), "data", "SURFER_SCUNet.pt"
@@ -464,54 +500,71 @@ class SegmentMapTool(ToolInstance):
             self.log.warning("Halfmap 2 is required for segmentation.")
             return
 
-        # Allow mask_map to be None.
-        if mask_map is None:
-            mask_map_np = None
-        else:
-            mask_map_np = mask_map.data.full_matrix()
+        mask_map_np = mask_map.data.full_matrix() if mask_map is not None else None
 
-        self.log.info("Segmenting map with the following inputs:")
         self.log.info(f"Input map: {input_map_for_segmentation.name}")
-
-        if mask_map is not None:
-            self.log.info(f"Mask map: {mask_map.name}")
-        else:
-            self.log.info("No mask map provided.")
+        self.log.info("No mask map provided." if mask_map is None else f"Mask map: {mask_map.name}")
 
         input_map_1_np = input_map_for_segmentation.data.full_matrix()
         input_map_2_np = input_map_2_for_segmentation.data.full_matrix()
-        input_map_np = (input_map_1_np + input_map_2_np) / 2.0  # Average the two halfmaps
-        pixel_size = input_map_for_segmentation.data.step
-        origin = input_map_for_segmentation.data.origin
-        # Print the status
-        self.log.info("Starting segmentation...")
-        # Call predict with the prediction options.
-        self.segmented_map = predict(
-            input_map_np,
-            pixel_size[0],
-            mask_map_np,
-            model_state_path=model_state_path,
-            batch_size=self._batch_size.value(),
-            step_size=self._step_size.value(),
-            gpu_ids=[self._gpu_id.value()],
-        )
-        self.log.info("Segmentation complete.")
+        input_map_np   = (input_map_1_np + input_map_2_np) / 2.0
 
-        # Create a segmentation volume from the segmented map.
-        seg_grid_data = ArrayGridData(
-            self.segmented_map, origin=origin, step=pixel_size
+        # Store metadata needed later in on_finished
+        self._seg_pixel_size = input_map_for_segmentation.data.step
+        self._seg_origin     = input_map_for_segmentation.data.origin
+
+        # ── Prepare UI ───────────────────────────────────────────────────────
+        self._segment_button.setEnabled(False)
+        self._progress_bar.setValue(0)
+        self._progress_bar.setVisible(True)
+        self.log.info("Starting segmentation…")
+
+        # ── Launch worker ────────────────────────────────────────────────────
+        predict_kwargs = dict(
+            input_map       = input_map_np,
+            apix            = self._seg_pixel_size[0],
+            mask            = mask_map_np,
+            model_state_path= model_state_path,
+            batch_size      = self._batch_size.value(),
+            step_size       = self._step_size.value(),
+            gpu_ids         = [self._gpu_id.value()],
+        )
+        self._worker = PredictionWorker(predict_kwargs)
+        self._worker.progress.connect(self._progress_bar.setValue)   # int → bar
+        self._worker.status.connect(self.log.info)                    # str → ChimeraX log
+        self._worker.finished.connect(self._on_segmentation_finished)
+        self._worker.start()
+
+    def _on_segmentation_finished(self, segmented_map):
+        """
+        Runs on the main thread — safe to create ChimeraX volumes here.
+        """
+        from chimerax.map import volume_from_grid_data
+        from chimerax.map_data import ArrayGridData
+
+        self.segmented_map = segmented_map
+
+        seg_grid_data      = ArrayGridData(
+            segmented_map,
+            origin = self._seg_origin,
+            step   = self._seg_pixel_size,
         )
         seg_grid_data.name = "Predicted detergent micelle"
         seg_vol = volume_from_grid_data(seg_grid_data, self.session)
         self._segmentation_volume = seg_vol
 
-        # Update the "Use segmented map:" menu with the segmentation volume.
         self._segmentation_menu.value = seg_vol
         self._segmentation_menu.setEnabled(True)
 
-        # Enable Step 2.
+        # ── Reset UI ─────────────────────────────────────────────────────────
+        self._progress_bar.setValue(100)
+        self._progress_bar.setVisible(False)
+        self._segment_button.setEnabled(True)
+
         self.show_step2 = True
         self._control_step2_display(self.show_step2)
+        self.log.info("Segmentation complete.")
+
 
     def _remove(self):
         target_map = self._target_map()
