@@ -1,8 +1,8 @@
-site_name: LocScale-SURFER
+site_name: SURFER
 site_url: https://github.com/cryotud/locscale-surfer
 site_author: Arjen Jakobi
 site_description: >-
-  Documentation for LocScale-SURFER
+  Documentation SURFER
 # Repository
 repo_name: cryoTUD/locscale-surfer
 repo_url: https://github.com/cryotud/locscale-surfer
@@ -11,9 +11,9 @@ repo_url: https://github.com/cryotud/locscale-surfer
 copyright: Copyright &copy; 2025 - 2025 Arjen Jakobi
 
 theme:
-  icon:
-    logo: material/home-circle
   name: material
+  logo: assets/images/surfer-icon-white.png
+  favicon: assets/images/favicon.png
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"

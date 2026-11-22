@@ -1,8 +1,8 @@
-# LocScale-SURFER<br><sup>**S**egmentation of **U**nresolved **R**egions and **F**iltering for **E**nhanced **R**epresentation</sup>
+# SURFER<br><sup>**S**egmentation of **U**nstructured **R**egions and **F**iltering for **E**nhanced **R**epresentation</sup>
 
-LocScale-SURFER is a [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) bundle for enhancing visualisation and interpretation of ```LocScale```-optimised maps containing contextual structure. It currently supports the detection and targeted segmentation/removal of micellar/membranous structures, but may be extended to other contextual structures in the future. 
+SURFER is a [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) bundle for segmentation of membrane, micelle and nanodisc densities in cryo-EM maps. Originally developed for enhancing visualisation and interpretation of ```LocScale```-optimised maps containing contextual structure, its segmentation procedure operates on unfiltered half maps and the resulting segmentation masks can be applied to any (post-processed) map aligned to these half maps. It currently supports the detection and targeted segmentation/removal of micellar/membranous structures, but may be extended to other contextual structures in the future. 
 
-### What does LocScale-SURFER do?
+### What does SURFER do?
 
 ```LocScale 2.0``` is a program for cryoEM map optimisation that attemps to preserve contextual structure in the optimised maps. For visualisation, it is often useful to toggle between views including and excluding this contextual structure. For example, for membrane proteins reconstituted in detergent micelles, liposomes or nanodisks it may be useful to represent the map with and without the micelle or membrane. ```LocScale-SURFER``` allows to infer these structures from the raw map to segment and subtract these densities from the optimised map. 
 

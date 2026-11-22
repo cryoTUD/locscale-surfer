@@ -1,8 +1,8 @@
 LocScale-SURFER has been developed by Alok Bharadwaj, Lotte Veerbeek and Arjen Jakobi at the Kavli Institute of Nanoscience Delft.
 
-LoScale-SURFER is facilitated by number of open-source projects.
+SURFER is facilitated by number of open-source projects.
 
-!!! info "Projects used in LocScale-SURFER"
+!!! info "Projects used in SURFER"
 
     - [`OPM database`](https://opm.phar.umich.edu/ppm_server): Orientations of Proteins in Membranes (OPM) database.
     - [`Optuna`](https://github.com/optuna/optuna): Hyperparameter optimisation. [MIT license]
@@ -13,5 +13,8 @@ We acknowledge the use of computational resources of the DelftBlue supercomputer
 
 ## References {#references}
 
-{==A preprint describing `LocScale-SURFER` is in preparation.==}
+If you found `SURFER` useful for your research, please consider citing it:
+
+- {==A. Bharadwaj, L. Veerbeek, A.J. Jakobi: [Interactive segmentation of membrane and membrane mimic densities in cryo-EM maps](https://doi.org/10.64898/2026.02.25.707988), BioRxiv 2026.02.25.707988 (2026)==}
+{==A preprint describing `SURFER` is in preparation.==}i
 ~                                                                 
