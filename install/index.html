@@ -100,8 +100,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="SURFER" class="md-header__button md-logo" aria-label="SURFER" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.07 4.93C17.22 3 14.66 1.96 12 2c-2.66-.04-5.21 1-7.06 2.93C3 6.78 1.96 9.34 2 12c-.04 2.66 1 5.21 2.93 7.06C6.78 21 9.34 22.04 12 22c2.66.04 5.21-1 7.06-2.93C21 17.22 22.04 14.66 22 12c.04-2.66-1-5.22-2.93-7.07M17 12v6h-3.5v-5h-3v5H7v-6H5l7-7 7.5 7z"/></svg>
+  <img src="../assets/images/surfer-icon-white.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -238,8 +237,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="SURFER" class="md-nav__button md-logo" aria-label="SURFER" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.07 4.93C17.22 3 14.66 1.96 12 2c-2.66-.04-5.21 1-7.06 2.93C3 6.78 1.96 9.34 2 12c-.04 2.66 1 5.21 2.93 7.06C6.78 21 9.34 22.04 12 22c2.66.04 5.21-1 7.06-2.93C21 17.22 22.04 14.66 22 12c.04-2.66-1-5.22-2.93-7.07M17 12v6h-3.5v-5h-3v5H7v-6H5l7-7 7.5 7z"/></svg>
+  <img src="../assets/images/surfer-icon-white.png" alt="logo">
 
     </a>
     SURFER
@@ -474,15 +472,15 @@
 <h3 id="from-the-chimerax-toolshed">From the ChimeraX toolshed</h3>
 <p>Navigate to the <a href="https://cxtoolshed.rbvi.ucsf.edu/">ChimeraX toolshed</a>: <code>Tools &gt; More tools</code> and install <code>locscalesurfer</code>.<br />
 Alternatively, in the ChimeraX command line interface:  </p>
-<div class="highlight"><pre><span></span><code>toolshed<span class="w"> </span>install<span class="w"> </span>locscalesurfer
-</code></pre></div>
+<p><code>bash
+toolshed install locscalesurfer</code>  </p>
 <p>You should now see the LocScale-SURFER tool in: <code>Tools &gt; Volume Data &gt; LocScale-SURFER</code></p>
 <h3 id="from-source-code">From source code:</h3>
 <ol>
 <li>
 <p>Clone the repository: 
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/cryoTUD/locscale-surfer.git
-</code></pre></div>
+<code>bash
+git clone https://github.com/cryoTUD/locscale-surfer.git</code>
 Note the full path of the cloned repository.
 PATH_TO_REPO = path/to/surfer</p>
 </li>
@@ -491,9 +489,9 @@ PATH_TO_REPO = path/to/surfer</p>
 </li>
 <li>
 <p>Install the bundle by running the following command:
-<div class="highlight"><pre><span></span><code>devel install PATH_TO_REPO
-devel clean PATH_TO_REPO
-</code></pre></div></p>
+<code>chimerax
+devel install PATH_TO_REPO
+devel clean PATH_TO_REPO</code></p>
 </li>
 <li>Restart ChimeraX.</li>
 <li>You should now see the LocScale-SURFER tool in: <code>Tools &gt; Volume Data &gt; LocScale-SURFER</code></li>
